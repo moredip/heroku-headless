@@ -1,6 +1,10 @@
 # Heroku::Headless::Deploy
 
-TODO: Write a gem description
+## What?
+Push from your git repo to a heroku app without any external configuration.
+
+## Why?
+Heroku's workflow is geared towards pushing to a heroku app from a dev workstation. This gem makes it easy to push to a heroku app as part of a CI/CD setup.
 
 ## Installation
 
@@ -15,15 +19,3 @@ And then execute:
 Or install it yourself as:
 
     $ gem install heroku-headless-deploy
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request

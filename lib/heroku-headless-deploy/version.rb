@@ -1,7 +1,3 @@
-module Heroku
-  module Headless
-    module Deploy
-      VERSION = "0.0.1"
-    end
-  end
+module HerokuHeadless
+  VERSION = "0.1.0"
 end
