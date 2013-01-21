@@ -1,4 +1,4 @@
-# Heroku::Headless::Deploy
+# HerokuHeadless
 
 ## What?
 Push from your git repo to a heroku app without any external configuration.
@@ -10,7 +10,7 @@ Heroku's workflow is geared towards pushing to a heroku app from a dev workstati
 
 Add this line to your application's Gemfile:
 
-    gem 'heroku-headless-deploy'
+    gem 'heroku-headless'
 
 And then execute:
 
@@ -18,4 +18,4 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install heroku-headless-deploy
+    $ gem install heroku-headless
