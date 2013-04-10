@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = HerokuHeadless::VERSION
 
   gem.add_runtime_dependency "heroku-api"
+  gem.add_development_dependency "rspec"
 end

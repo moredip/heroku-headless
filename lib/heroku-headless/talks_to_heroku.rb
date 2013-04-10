@@ -3,7 +3,7 @@ require 'heroku-api'
 module HerokuHeadless
   module TalksToHeroku
     def heroku
-      @heroku ||= Heroku::API.new()
+      HerokuHeadless.heroku
     end
   end
 end
