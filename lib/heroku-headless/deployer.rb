@@ -1,5 +1,6 @@
 require 'pathname'
 require 'tmpdir'
+require 'rendezvous'
 
 module HerokuHeadless
   class Deployer
@@ -19,6 +20,7 @@ module HerokuHeadless
       prep_temp_dir
       setup_ssh_key
       do_action('push git to heroku'){ push_head_to_app }
+      do_action('post_deploy_hooks'){ run_post_deploy_hooks }
 
     ensure
       cleanup
@@ -86,6 +88,18 @@ module HerokuHeadless
 
     def push_git
       system( {'GIT_SSH'=>custom_git_ssh_path.to_s}, "git push git@heroku.com:#{@app_name}.git HEAD:master" )
+    end
+
+    def run_post_deploy_hooks
+      HerokuHeadless.configuration.post_deploy_commands.each do | command |
+        do_action( command ){ run_command(command) }
+      end
+    end
+
+    def run_command(cmd)
+      data = heroku.post_ps(@app_name, cmd, :attach => true).body
+      rendezvous_url = data['rendezvous_url']
+      Rendezvous.start(:url => rendezvous_url) unless rendezvous_url.nil?
     end
 
     def custom_git_ssh_path
