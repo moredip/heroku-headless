@@ -24,7 +24,7 @@ module HerokuHeadless
     attr_accessor :mock_mode, :post_deploy_commands
 
     def initialize
-      post_deploy_commands = []
+      @post_deploy_commands = []
     end
   end
 end

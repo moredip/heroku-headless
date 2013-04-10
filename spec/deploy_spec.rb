@@ -17,15 +17,19 @@ describe 'HerokuHeadless' do
   end
 
   it "should call post-deploy actions" do
+    heroku.post_app(:name => 'app_with_db')
+
     HerokuHeadless.configure do | config |
       config.post_deploy_commands = [
-        'rake db:migrate',
-        'rake db:seed_fu'
+        'echo hello',
+        'echo success'
       ]
     end
+
     HerokuHeadless::Deployer.any_instance.should_receive(:push_git)
-    HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('rake db:migrate')
-    HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('rake db:seed_fu')
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('echo hello')
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('echo success')
+
     HerokuHeadless::Deployer.deploy('app_with_db')
     $?.exitstatus.should eq 0
   end
