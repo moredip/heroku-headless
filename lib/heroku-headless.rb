@@ -21,6 +21,10 @@ module HerokuHeadless
   end
 
   class Configuration
-    attr_accessor :mock_mode
+    attr_accessor :mock_mode, :post_deploy_commands
+
+    def initialize
+      post_deploy_commands = []
+    end
   end
 end
