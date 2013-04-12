@@ -8,12 +8,15 @@ require "heroku-headless/deployer"
 
 module HerokuHeadless
   class << self
-    attr_accessor :configuration
+    attr_writer :configuration
   end
 
   def self.configure
-    self.configuration ||= Configuration.new
     yield(configuration)
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
   end
 
   def self.heroku
@@ -25,6 +28,7 @@ module HerokuHeadless
 
     def initialize
       @post_deploy_commands = []
+      @mock_mode ||= false
     end
   end
 end
