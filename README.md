@@ -1,3 +1,7 @@
+[![Build Status](https://secure.travis-ci.org/moredip/heroku-headless.png?branch=master)](http://travis-ci.org/moredip/heroku-headless)
+[![Dependency Status](https://gemnasium.com/moredip/heroku-headless.png?travis)](https://gemnasium.com/moredip/heroku-headless)
+[![Code Climate](https://codeclimate.com/github/moredip/heroku-headless.png)](https://codeclimate.com/github/moredip/heroku-headless)
+
 # HerokuHeadless
 
 ## What?
