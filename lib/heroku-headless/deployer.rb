@@ -8,7 +8,7 @@ module HerokuHeadless
     include TalksToHeroku
 
     def self.deploy(app_name)
-      new(app_name,CreatesUUIDs.generate_lowercase_uuid).deploy
+      new(app_name,CreatesUIDs.generate_uid).deploy
     end
 
     def initialize( app_name, uid )

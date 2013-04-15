@@ -26,13 +26,13 @@ module HerokuHeadless
     end
 
     def create_app
-      app_name = "disposable-#{deploy_uuid}"[0,30]
+      app_name = "disposable-#{deploy_uid}"[0,30]
       heroku.post_app( name: app_name )
       @app_name = app_name
     end
 
     def deploy_app
-      Deployer.new(@app_name,deploy_uuid).deploy
+      Deployer.new(@app_name,deploy_uid).deploy
     end
 
     def cleanup
@@ -47,8 +47,8 @@ module HerokuHeadless
       heroku.delete_app( @app_name ) if @app_name
     end
 
-    def deploy_uuid
-      @deploy_uuid ||= CreatesUUIDs.generate_lowercase_uuid
+    def deploy_uid
+      @deploy_uid ||= CreatesUIDs.generate_uid
     end
   end
 end
