@@ -1,7 +1,9 @@
+require 'securerandom'
+
 module HerokuHeadless
   module CreatesUIDs
     def generate_uid
-      `uuidgen`.chomp.downcase
+      SecureRandom.hex(16).downcase
     end
     module_function :generate_uid
   end
