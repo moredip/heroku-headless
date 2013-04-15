@@ -23,3 +23,16 @@ And then execute:
 Or install it yourself as:
 
     $ gem install heroku-headless
+    
+## How do I use this?
+It's as simple as
+```ruby
+require 'heroku-headless'
+HerokuHeadless::Deployer.deploy( 'your-app-name' )
+```
+
+## Tell me more!
+
+[Deploying To Heroku From CI](http://blog.thepete.net/blog/2013/01/21/deploying-to-heroku-from-ci)
+
+[Deploying to Heroku From CI - the Gory Details](http://blog.thepete.net/blog/2013/01/22/deploying-to-heroku-from-ci-the-gory-details/)
