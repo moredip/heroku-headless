@@ -33,4 +33,25 @@ describe 'HerokuHeadless' do
     result = HerokuHeadless::Deployer.deploy('app_with_db')
     result.should be_true
   end
+
+  it "should run the git pre-deploy commands" do
+    @app_name = 'app_with_configuration_changes'
+    heroku.post_app(:name => @app_name)
+    HerokuHeadless.configure do | config |
+      config.pre_deploy_git_commands = [
+        "git checkout master",
+        "git remote add heroku git@heroku.com:#{@app_name}.git"
+      ]
+    end
+
+    HerokuHeadless::Deployer.any_instance.should_receive(:push_git).and_return(true)
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_git_command).with("git checkout master")
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_git_command).with("git remote add heroku git@heroku.com:#{@app_name}.git")
+
+    result = HerokuHeadless::Deployer.deploy(@app_name)
+    result.should be_true
+
+  end
+
+
 end
