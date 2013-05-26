@@ -4,16 +4,16 @@ describe 'HerokuHeadless' do
   let(:heroku) { HerokuHeadless.heroku }
 
   it "should fail to deploy a missing app" do
-    HerokuHeadless::Deployer.deploy('missing_app')
-    $?.exitstatus.should_not eq 0
+    result = HerokuHeadless::Deployer.deploy('missing_app')
+    result.should be_false
   end
 
   it "should successfully deploy an existing app" do
     heroku.post_app(:name => 'existing_app')
     # Creating an app on heroku actually isn't enough to make the git push pass!
-    HerokuHeadless::Deployer.any_instance.should_receive(:push_git)
-    HerokuHeadless::Deployer.deploy('existing_app')
-    $?.exitstatus.should eq 0
+    HerokuHeadless::Deployer.any_instance.should_receive(:push_git).and_return(true)
+    result = HerokuHeadless::Deployer.deploy('existing_app')
+    result.should be_true
   end
 
   it "should call post-deploy actions" do
@@ -26,11 +26,32 @@ describe 'HerokuHeadless' do
       ]
     end
 
-    HerokuHeadless::Deployer.any_instance.should_receive(:push_git)
+    HerokuHeadless::Deployer.any_instance.should_receive(:push_git).and_return(true)
     HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('echo hello')
     HerokuHeadless::Deployer.any_instance.should_receive(:run_command).with('echo success')
 
-    HerokuHeadless::Deployer.deploy('app_with_db')
-    $?.exitstatus.should eq 0
+    result = HerokuHeadless::Deployer.deploy('app_with_db')
+    result.should be_true
   end
+
+  it "should run the git pre-deploy commands" do
+    @app_name = 'app_with_configuration_changes'
+    heroku.post_app(:name => @app_name)
+    HerokuHeadless.configure do | config |
+      config.pre_deploy_git_commands = [
+        "git checkout master",
+        "git remote add heroku git@heroku.com:#{@app_name}.git"
+      ]
+    end
+
+    HerokuHeadless::Deployer.any_instance.should_receive(:push_git).and_return(true)
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_git_command).with("git checkout master")
+    HerokuHeadless::Deployer.any_instance.should_receive(:run_git_command).with("git remote add heroku git@heroku.com:#{@app_name}.git")
+
+    result = HerokuHeadless::Deployer.deploy(@app_name)
+    result.should be_true
+
+  end
+
+
 end

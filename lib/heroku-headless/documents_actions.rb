@@ -2,8 +2,9 @@ module HerokuHeadless
   module DocumentsActions
     def do_action(description)
       print "  " + description + " ..."
-      yield
+      result = yield
       puts " DONE"
+      result
     end
   end
 end

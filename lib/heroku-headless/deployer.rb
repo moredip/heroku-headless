@@ -19,14 +19,14 @@ module HerokuHeadless
     def deploy
       prep_temp_dir
       setup_ssh_key
-      do_action('push git to heroku'){ push_head_to_app }
-      do_action('post_deploy_hooks'){ run_post_deploy_hooks }
-
+      result = do_action('push git to heroku'){ push_head_to_app }
+      result = result && do_action('post_deploy_hooks'){ run_post_deploy_hooks }
+      result
     ensure
       cleanup
     end
 
-    private 
+    private
 
     def prep_temp_dir
       @tmpdir = Pathname.new( Dir.tmpdir ).join('heroku-deployer').join(@uid)
@@ -66,13 +66,14 @@ module HerokuHeadless
     def add_ssh_key
       heroku.post_key(public_ssh_key)
     end
-    
+
     def remove_ssh_key
       heroku.delete_key(ssh_key_name)
     end
 
     def push_head_to_app
       setup_custom_git_ssh
+      run_pre_deploy_git_commands
       push_git
     end
 
@@ -88,6 +89,16 @@ module HerokuHeadless
 
     def push_git
       system( {'GIT_SSH'=>custom_git_ssh_path.to_s}, "git push git@heroku.com:#{@app_name}.git HEAD:master" )
+    end
+
+    def run_pre_deploy_git_commands
+      HerokuHeadless.configuration.pre_deploy_git_commands.each do | command |
+        do_action( command ) { run_git_command(command) }
+      end
+    end
+    def run_git_command(command)
+      result = system( {'GIT_SSH'=>custom_git_ssh_path.to_s}, command )
+      result
     end
 
     def run_post_deploy_hooks
