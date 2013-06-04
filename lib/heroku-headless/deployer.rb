@@ -88,7 +88,13 @@ module HerokuHeadless
     end
 
     def push_git
-      system( {'GIT_SSH'=>custom_git_ssh_path.to_s}, "git push git@heroku.com:#{@app_name}.git HEAD:master" )
+      system( {'GIT_SSH'=>custom_git_ssh_path.to_s}, git_push_command )
+    end
+
+    def git_push_command
+      cmd = "git push "
+      cmd << "-f " if HerokuHeadless.configuration.force_push
+      cmd << "git@heroku.com:#{@app_name}.git HEAD:master"
     end
 
     def run_pre_deploy_git_commands

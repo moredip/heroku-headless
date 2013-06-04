@@ -34,6 +34,29 @@ describe 'HerokuHeadless' do
     result.should be_true
   end
 
+  context "forced pushs" do
+    let(:headless) { HerokuHeadless::Deployer.new("forced_app", HerokuHeadless::CreatesUIDs.generate_uid) }
+    subject { headless.send(:git_push_command) }
+
+    context "enabled forced push" do
+      before do
+        HerokuHeadless.configure do | config |
+          config.force_push = true
+        end
+      end
+      it {should eq "git push -f git@heroku.com:forced_app.git HEAD:master"}
+    end
+
+    context "disabled forced push" do
+      before do
+        HerokuHeadless.configure do | config |
+          config.force_push = false
+        end
+      end
+      it {should eq "git push git@heroku.com:forced_app.git HEAD:master"}
+    end
+  end
+
   it "should run the git pre-deploy commands" do
     @app_name = 'app_with_configuration_changes'
     heroku.post_app(:name => @app_name)
