@@ -21,6 +21,9 @@ module HerokuHeadless
       setup_ssh_key
       result = do_action('push git to heroku'){ push_head_to_app }
       result = result && do_action('post_deploy_hooks'){ run_post_deploy_hooks }
+      if HerokuHeadless.configuration.restart_processes
+        result = result && do_action('restart_processes'){ restart_processes }
+      end
       result
     ensure
       cleanup
@@ -111,6 +114,11 @@ module HerokuHeadless
       HerokuHeadless.configuration.post_deploy_commands.each do | command |
         do_action( command ){ run_command(command) }
       end
+    end
+
+    def restart_processes
+      response = heroku.post_ps_restart(@app_name)
+      response.body == "ok"
     end
 
     def run_command(cmd)
