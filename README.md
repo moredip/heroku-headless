@@ -58,6 +58,28 @@ require 'heroku-headless'
 
 ```
 
+### Restart processes after deployment and post-commands:
+
+```ruby
+require 'heroku-headless'
+
+  app_name = 'my-heroku-app-name'
+  remote_name = 'herokuheadless'
+
+  puts "deploying to heroku app #{app_name}"
+  remote_name = "headlessheroku"
+  HerokuHeadless.configure do | config |
+    config.post_deploy_commands = ['rake db:migrate']
+    config.restart_processes = true
+  end
+
+  result = HerokuHeadless::Deployer.deploy( app_name )
+  puts "successfully deployed to #{app_name}" if result
+  exit result ? 0 : 1
+
+```
+
+
 ## Tell me more!
 
 [Deploying To Heroku From CI](http://blog.thepete.net/blog/2013/01/21/deploying-to-heroku-from-ci)
