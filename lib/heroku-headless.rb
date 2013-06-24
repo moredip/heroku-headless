@@ -24,13 +24,15 @@ module HerokuHeadless
   end
 
   class Configuration
-    attr_accessor :mock_mode, :pre_deploy_git_commands, :post_deploy_commands, :force_push
+    attr_accessor :mock_mode, :pre_deploy_git_commands, :post_deploy_commands,
+      :force_push, :restart_processes
 
     def initialize
       @pre_deploy_git_commands = []
       @post_deploy_commands = []
       @force_push ||= false
       @mock_mode ||= false
+      @restart_processes ||= false
     end
   end
 end

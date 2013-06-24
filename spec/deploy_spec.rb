@@ -34,6 +34,20 @@ describe 'HerokuHeadless' do
     result.should be_true
   end
 
+  it "should restart the app if configured" do
+    heroku.post_app(:name => 'app_with_restart')
+
+    HerokuHeadless.configure do | config |
+      config.restart_processes = true
+    end
+
+    HerokuHeadless::Deployer.any_instance.should_receive(:push_git).and_return(true)
+    HerokuHeadless::Deployer.any_instance.should_receive(:restart_processes).and_call_original
+
+    result = HerokuHeadless::Deployer.deploy('app_with_restart')
+    result.should be_true
+  end
+
   context "forced pushs" do
     let(:headless) { HerokuHeadless::Deployer.new("forced_app", HerokuHeadless::CreatesUIDs.generate_uid) }
     subject { headless.send(:git_push_command) }
