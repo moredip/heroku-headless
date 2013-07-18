@@ -58,7 +58,7 @@ describe 'HerokuHeadless' do
           config.force_push = true
         end
       end
-      it {should eq "git push -f git@heroku.com:forced_app.git HEAD:master"}
+      it {should eq "git push -f git@heroku.com:forced_app.git HEAD:refs/heads/master"}
     end
 
     context "disabled forced push" do
@@ -67,7 +67,7 @@ describe 'HerokuHeadless' do
           config.force_push = false
         end
       end
-      it {should eq "git push git@heroku.com:forced_app.git HEAD:master"}
+      it {should eq "git push git@heroku.com:forced_app.git HEAD:refs/heads/master"}
     end
   end
 
