@@ -85,3 +85,13 @@ require 'heroku-headless'
 [Deploying To Heroku From CI](http://blog.thepete.net/blog/2013/01/21/deploying-to-heroku-from-ci)
 
 [Deploying to Heroku From CI - the Gory Details](http://blog.thepete.net/blog/2013/01/22/deploying-to-heroku-from-ci-the-gory-details/)
+
+
+## Travis
+
+If you're using Travis, you don't need this - they have a [deploy tool](http://about.travis-ci.org/docs/user/deployment/heroku/) that automates the process. The easiest way to set it up is to run:
+
+```bash
+$ gem install travis
+$ travis setup heroku
+```
