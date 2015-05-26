@@ -78,7 +78,22 @@ require 'heroku-headless'
   exit result ? 0 : 1
 
 ```
+### Enable force push:
 
+```ruby
+require 'heroku-headless'
+
+ app_name = 'my-heroku-app-name'
+
+ HerokuHeadless.configure do | config |
+   config.force_push = true   
+ end
+
+ result = HerokuHeadless::Deployer.deploy( app_name )
+ puts "successfully deployed to #{app_name}" if result
+ exit result ? 0 : 1
+
+ ```
 
 ## Tell me more!
 
